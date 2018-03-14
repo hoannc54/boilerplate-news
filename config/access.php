@@ -90,4 +90,24 @@ return [
      * Makes it so social logins can not change passwords, etc.
      */
     'socialite_session_name' => 'socialite_provider',
+    'role_list' => [
+        'administrator' => 'Administrator',
+        'admod' => 'Admod',
+        'author' => 'Author'
+
+    ],
+    'perm_list' => [
+        'view_backend' => 'view backend',
+        'manage_users' => 'Manage users',
+        'view_categories' => 'Manage categories',
+        'create_categories' => 'Tạo danh mục',
+        'edit_categories' => 'Sửa danh mục',
+        'delete_categories' => 'Xoá danh mục',
+        'view_other_posts' => 'Xem các bài viết của người khác',
+        'create_posts' => '',
+        'edit_other_posts' => '',
+        'delete_other_posts' => '',
+        'publish_posts' => '',
+        'manage_posts' => 'Manage posts'
+    ]
 ];

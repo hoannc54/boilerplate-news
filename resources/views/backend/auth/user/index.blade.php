@@ -12,7 +12,8 @@
         <div class="row">
             <div class="col-sm-5">
                 <h4 class="card-title mb-0">
-                    {{ __('labels.backend.access.users.management') }} <small class="text-muted">{{ __('labels.backend.access.users.active') }}</small>
+                    {{--{{ __('labels.backend.access.users.management') }} <small class="text-muted">{{ __('labels.backend.access.users.active') }}</small>--}}
+                    Quản lý người dùng <small class="text-muted">Danh sách</small>
                 </h4>
             </div><!--col-->
 

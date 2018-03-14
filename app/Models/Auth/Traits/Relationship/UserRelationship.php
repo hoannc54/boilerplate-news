@@ -2,6 +2,7 @@
 
 namespace App\Models\Auth\Traits\Relationship;
 
+use App\Models\Post;
 use App\Models\System\Session;
 use App\Models\Auth\SocialAccount;
 
@@ -24,5 +25,9 @@ trait UserRelationship
     public function sessions()
     {
         return $this->hasMany(Session::class);
+    }
+
+    public function posts(){
+        return $this->hasMany(Post::class, 'id');
     }
 }

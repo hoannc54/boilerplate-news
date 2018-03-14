@@ -13,8 +13,9 @@
                 <div class="row">
                     <div class="col-sm-5">
                         <h4 class="card-title mb-0">
-                            {{ __('labels.backend.access.users.management') }}
-                            <small class="text-muted">{{ __('labels.backend.access.users.create') }}</small>
+                            {{--{{ __('labels.backend.access.users.management') }}--}}
+                            {{--<small class="text-muted">{{ __('labels.backend.access.users.create') }}</small>--}}
+                            Quản lý người dùng <small class="text-muted">Tạo mới</small>
                         </h4>
                     </div><!--col-->
                 </div><!--row-->

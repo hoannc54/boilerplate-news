@@ -9,6 +9,7 @@
         "appstract/laravel-blade-directives": "^0.4.4",
         "arcanedev/log-viewer": "^4.4",
         "arcanedev/no-captcha": "^5.0",
+        "baum/baum": "^1.1",
         "creativeorange/gravatar": "~1.0",
         "davejamesmiller/laravel-breadcrumbs": "^5.0",
         "fideloper/proxy": "~4.0",
