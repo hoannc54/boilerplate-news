@@ -39,7 +39,7 @@
                                     @else
                                         @if ($role->permissions->count())
                                             @foreach ($role->permissions as $permission)
-                                                {{ ucwords($permission->name) }}
+                                                {{ ucfirst($permission->desc) }} ;
                                             @endforeach
                                         @else
                                             {{ __('labels.general.none') }}

@@ -11,9 +11,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#inputDescription').summernote({
-                height: 500
-            });
+            var content = '{!! $post->content !!}';
+            console.log(content);
+            $('#inputDescription').summernote('code', content);
         });
         $(document).ready(function() {
             $('#password').click(function () {
@@ -48,10 +48,11 @@
                     Tạo bài viết mới
                 </div><!--card-header-->
                 <div class="card-block">
-                    <form action="{{ route('admin.post.store') }}" method="post" id="form-post-create" enctype="multipart/form-data">
+                    <form action="{{ route('admin.post.update', $post->id) }}" method="post" id="form-post-create" enctype="multipart/form-data">
                         {!! csrf_field() !!}
+                        {{ method_field('PATCH') }}
                         <div class="form-group">
-                            <input type="text" class="form-control" name="title" placeholder="Tiêu đề bài viết">
+                            <input type="text" class="form-control" name="title" value="{{ old('title', $post->title) }}" placeholder="Tiêu đề bài viết">
                         </div>
                         <div class="form-group">
 
@@ -85,7 +86,7 @@
                         @foreach(\App\Models\Post::STATUS as $status => $name)
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="status" id="{{ $status }}" value="{{ $status }}"
-                                       form="form-post-create" @if($status == 'publish') checked @endif>
+                                       form="form-post-create" @if($status == $post->status) checked @endif>
                                 <label class="form-check-label" for="{{$status}}">
                                     {{ $name }}
                                 </label>
@@ -104,7 +105,7 @@
                         @foreach(\App\Models\Post::VISIBILITY as $status => $name)
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="visibility" id="{{ $status }}" value="{{ $status }}" form="form-post-create"
-                                       @if($status == 'public') checked @endif>
+                                       @if($status == $post->visibility) checked @endif>
                                 <label class="form-check-label" for="{{$status}}">
                                     {{ $name }}
                                 </label>
@@ -119,7 +120,7 @@
                     </div>
                     <hr>
                     <div>
-                        <b><i class="fa fa-clock-o"></i> Thời gian: </b><i>{{ \Carbon\Carbon::now()->toDateTimeString() }}</i><a data-toggle="collapse" href="#collapseDate" aria-expanded="false" aria-controls="collapseExample">
+                        <b><i class="fa fa-clock-o"></i> Thời gian: </b><i>{{ $post->date }}</i><a data-toggle="collapse" href="#collapseDate" aria-expanded="false" aria-controls="collapseExample">
                             Sửa
                         </a>
                     </div>
@@ -132,7 +133,7 @@
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-secondary" form="form-post-create">Xem thử</button>
-                    <button type="submit" class="btn btn-primary float-right" form="form-post-create">Đăng bài</button>
+                    <button type="submit" class="btn btn-primary float-right" form="form-post-create">Cập nhật</button>
                 </div>
             </div>
             <div class="card">
@@ -152,7 +153,8 @@
                     Ảnh đại diện
                 </div>
                 <div class="card-block">
-                    <img id="blah" src="#" alt="your image" width="100%">
+                    <img id="blah" src="{{ url($post->img_path) }}" alt="your image" width="100%" style="margin-bottom: 20px">
+
                     <input type='file' id="imgInp" name="image" form="form-post-create"/>
 
                 </div>

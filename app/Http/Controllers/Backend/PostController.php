@@ -6,9 +6,12 @@ use App\Models\Auth\User;
 use App\Models\Category;
 use App\Models\Post;
 use Carbon\Carbon;
+use Faker\Provider\File;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -27,13 +30,12 @@ class PostController extends Controller
     public function index()
     {
         $logged_in_user = Auth::user();
-//        dd($logged_in_user);
         if ($logged_in_user->hasRole(['administrator', 'admod'])){
-            $data['posts'] = Post::with(['user'])->orderBy('updated_at', 'desc')->get();
+            $data['posts'] = Post::with(['user', 'categories'])->orderBy('updated_at', 'desc')->get();
         }else{
-            $data['posts'] = Post::where('author', $logged_in_user->id)->with(['user'])->orderBy('updated_at', 'desc')->get();
+            $data['posts'] = Post::where('author', $logged_in_user->id)->with(['user', 'categories'])->orderBy('updated_at', 'desc')->get();
         }
-
+        $data['categories'] = [0 => 'Tất cả danh mục'] + Category::getNestedList('title', 'id', Category::LIST_INDENT);
         return view('backend.posts.index', $data);
     }
 
@@ -56,24 +58,44 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->get('categories'));
-//        dd($request->all());
-        $new_post = new Post();
-        $new_post->content = $request->get('content');
-        $new_post->title = $request->get('title');
-        $new_post->status = $request->get('status');
-        $new_post->date = Carbon::now()->toDateTimeString();
-        $new_post->author = Auth::id();
-//        $category_ids = [$request->get('category_id')];
-        $save = $new_post->save();
-        if ($save){
-            $post_current = Post::orderBy('created_at', 'desc')->first();
+        try{
+            $new_post = [
+                'title' => $request->get('title'),
+                'content' => $request->get('content'),
+                'status' => $request->get('status'),
+                'visibility' => $request->get('visibility'),
+                'author' => Auth::id(),
+                'date' => $request->get('date', null)
+            ];
+            if (empty($new_post['date'])){
+                $new_post['date'] = Carbon::now()->toDateTimeString();
+            }
+            if ($new_post['status'] == 'password'){
+                if (!empty($request->get('password')))
+                    $new_post['password'] = Hash::make($request->get('password'));
+            }
+            $post_current = Post::create($new_post);
+            if ($request->has('image')){
+                $ext = $request->file('image')->getClientOriginalExtension();
+                $filename = $post_current->id . '.' . $ext;
+
+                $path_public = 'images/posts';
+                $path_uploaded = $request->file('image')->move(public_path($path_public), $filename);
+                if (!empty($path_uploaded)){
+                    $post_current->img_path = $path_public . '/' . $filename;
+                    $post_current->save();
+                }
+
+            }
+
             $categories = $request->get('categories');
             $post_current->categories()->attach($categories);
+
             return redirect()->route('admin.post.index');
-        }else{
-            return back();
+        }catch (\Exception $exception){
+            return back()->withFlashDanger($exception->getMessage());
         }
+
 
     }
 
@@ -97,7 +119,9 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data['post'] = Post::find($id);
+        $data['categories'] = Category::getNestedList('title', 'id', Category::LIST_INDENT);
+        return view('backend.posts.edit', $data);
     }
 
     /**
@@ -109,7 +133,44 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
+        try{
+            $new_post = [
+                'title' => $request->get('title'),
+                'content' => $request->get('content'),
+                'status' => $request->get('status'),
+                'visibility' => $request->get('visibility'),
+                'author' => Auth::id(),
+                'date' => $request->get('date', null)
+            ];
+            if (empty($new_post['date'])){
+                $new_post['date'] = Carbon::now()->toDateTimeString();
+            }
+            if ($new_post['status'] == 'password'){
+                if (!empty($request->get('password')))
+                    $new_post['password'] = Hash::make($request->get('password'));
+            }
+            $post_current = Post::find($id);
+            $post_current->update($new_post);
+            if ($request->has('image')){
+                $ext = $request->file('image')->getClientOriginalExtension();
+                $filename = $post_current->id . '.' . $ext;
 
+                $path_public = 'images/posts';
+                $path_uploaded = $request->file('image')->move(public_path($path_public), $filename);
+                if (!empty($path_uploaded)){
+                    $post_current->img_path = $path_public . '/' . $filename;
+                    $post_current->save();
+                }
+
+            }
+
+            $categories = $request->get('categories');
+            $post_current->categories()->attach($categories);
+
+            return redirect()->route('admin.post.index');
+        }catch (\Exception $exception){
+            return back()->withFlashDanger($exception->getMessage());
+        }
     }
 
     /**

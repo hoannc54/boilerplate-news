@@ -50,7 +50,7 @@
                                                 . '<span class="switch-label"></span><span class="switch-handle"></span>')
                                             ->class('switch switch-sm switch-3d switch-primary')
                                             ->for('permission-'.$permission->id) }}
-                                        {{ html()->label(ucwords($permission->name))->for('permission-'.$permission->id) }}
+                                        {{ html()->label(ucfirst($permission->desc))->for('permission-'.$permission->id) }}
                                     </div>
                                 @endforeach
                             @endif

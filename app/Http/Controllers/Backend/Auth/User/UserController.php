@@ -54,7 +54,7 @@ class UserController extends Controller
     {
         return view('backend.auth.user.create')
             ->withRoles($roleRepository->with('permissions')->get(['id', 'name']))
-            ->withPermissions($permissionRepository->get(['id', 'name']));
+            ->withPermissions($permissionRepository->get(['id', 'name', 'desc']));
     }
 
     /**

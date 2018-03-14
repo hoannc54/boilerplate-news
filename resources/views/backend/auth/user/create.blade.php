@@ -167,7 +167,7 @@
                                                                 @if ($role->id != 1)
                                                                     @if ($role->permissions->count())
                                                                         @foreach ($role->permissions as $permission)
-                                                                            <i class="fa fa-dot-circle-o"></i> {{ ucwords($permission->name) }}
+                                                                            <i class="fa fa-dot-circle-o"></i> {{ ucfirst($permission->desc) }}
                                                                         @endforeach
                                                                     @else
                                                                         {{ __('labels.general.none') }}
@@ -191,7 +191,7 @@
                                                                     . '<span class="switch-label"></span><span class="switch-handle"></span>')
                                                                 ->class('switch switch-sm switch-3d switch-primary')
                                                                 ->for('permission-'.$permission->id) }}
-                                                            {{ html()->label(ucwords($permission->name))->for('permission-'.$permission->id) }}
+                                                            {{ html()->label(ucfirst($permission->desc))->for('permission-'.$permission->id) }}
                                                         </div>
                                                     @endforeach
                                                 @endif

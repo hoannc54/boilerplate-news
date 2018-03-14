@@ -27,16 +27,26 @@ class PermissionRoleTableSeeder extends Seeder
         $author = Role::create(['name' => 'author']);
 
         // Create Permissions
-        Permission::create([
-            'name' => 'view_backend',
-        ]);
+        $permissions = config('access.perm_list');
+        foreach ($permissions as $name => $desc){
+            Permission::create([
+                'name' => $name,
+                'desc' => $desc
+            ]);
+        }
+
 
         // ALWAYS GIVE ADMIN ROLE ALL PERMISSIONS
-        $admin->givePermissionTo('view backend');
+        $admin_permissions = array_keys($permissions);
+        $admin->givePermissionTo($admin_permissions);
 
         // Assign Permissions to other Roles
-        $admod->givePermissionTo('view backend');
-        $author->givePermissionTo('view backend');
+        $admod_permissions = [
+            ''
+        ];
+        $admod->givePermissionTo('view_backend');
+        $author_permissions = [];
+        $author->givePermissionTo('view_backend');
 
         $this->enableForeignKeys();
     }

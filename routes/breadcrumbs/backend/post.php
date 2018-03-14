@@ -19,3 +19,7 @@ Breadcrumbs::register('admin.post.edit', function ($breadcrumbs, $id) {
     $breadcrumbs->parent('admin.post.index');
     $breadcrumbs->push('Chỉnh sửa', route('admin.post.edit', $id));
 });
+Breadcrumbs::register('admin.post.show', function ($breadcrumbs, $id) {
+    $breadcrumbs->parent('admin.post.index');
+    $breadcrumbs->push('Chỉnh sửa', route('admin.post.show', $id));
+});

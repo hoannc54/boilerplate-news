@@ -31,3 +31,5 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
         Route::patch('profile/update', 'ProfileController@update')->name('profile.update');
     });
 });
+
+Route::get('bai-viet/{id}-{slug}.html', 'PostController@show')->name('post.show');

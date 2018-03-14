@@ -7,12 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    const STATUS = [
+    const VISIBILITY = [
         'public' => 'Công khai',
-        'draft' => 'Lưu nháp',
+        'private' => 'Riêng tư',
         'password' => 'Đặt mật khẩu'
     ];
-
+    const STATUS = [
+        'publish' => 'Xuất bản',
+        'draft' => 'Lưu nháp'
+    ];
+    protected $fillable = ['title', 'content', 'status', 'visibility', 'author', 'date', 'password', 'img_path'];
     public function categories(){
         return $this->belongsToMany(Category::class, 'post_category');
     }
