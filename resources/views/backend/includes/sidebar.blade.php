@@ -18,11 +18,13 @@
                 </a>
 
                 <ul class="nav-dropdown-items">
+                    @can('view_categories')
                     <li class="nav-item">
                         <a class="nav-link {{ active_class(Active::checkUriPattern('admin/category')) }}" href="{{ route('admin.category.index') }}">
                             <i class="fa fa-list-alt"></i> Danh sách
                         </a>
                     </li>
+                    @endcan
                     <li class="nav-item">
                         <a class="nav-link {{ active_class(Active::checkUriPattern('admin/category/create')) }}" href="{{ route('admin.category.create') }}">
                             <i class="fa fa-plus-circle"></i> Thêm mới
